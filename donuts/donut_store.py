@@ -60,15 +60,11 @@ class TestDonutShop(unittest.TestCase):
                          .groupby("Donut")
                          .agg({"Quantity": ["sum"]}))
 
-        print("sdflkjglkdjsgfl;kjgdf;lkhj;ksl'fdgjhlk;fgsjh;ljfgs;lhjl;sfg")
-        print(donuts_by_qty.columns)
-        print(donuts_by_qty)
-
         donuts_by_qty.columns = donuts_by_qty.columns.get_level_values(0)
         print(donuts_by_qty.columns)
 
-        popularity_list = (donuts_by_qty.sort_values(["Quantity", "Donut"],
-                                                     ascending=[False, True])
+        popularity_list = (donuts_by_qty
+                           .sort_values(["Quantity", "Donut"], ascending=[False, True])
                            .index.to_list())
 
         expected = ["Old Fashioned", "Apple Cider", "Jelly", "Blueberry", "Pumpkin Spice"]
@@ -121,15 +117,9 @@ class TestDonutShop(unittest.TestCase):
             columns=["Customer", "OrderPrice"]
         ).set_index("Customer")
 
-        print(spend_per_customer)
-        print(type(spend_per_customer))
-
-        print(expected)
-
         self.assertTrue(expected.equals(spend_per_customer))
 
     def test_donut_count_per_customer_per_day(self):
-        # TODO: use pivot_table
         deliveries_by_cust_by_date = (self.orders
                                       .groupby(["Customer", "DeliveryDate"])
                                       .sum() # only care about Quantity
@@ -144,6 +134,25 @@ class TestDonutShop(unittest.TestCase):
                 YESTERDAY: [14.0, 12.0, nan, nan],
                 TODAY: [14.0, nan, 12.0, nan],
                 TOMORROW: [12.0, 1.0, 2.0, 12.0]
+            }
+        ).set_index("Customer")
+
+        self.assertTrue(expected.equals(deliveries_by_cust_by_date))
+
+    def test_donut_count_per_customer_per_day_2(self):
+
+        deliveries_by_cust_by_date = (self.orders.pivot_table(values="Quantity",
+                                                              index=["Customer"],
+                                                              columns=["DeliveryDate"],
+                                                              aggfunc="sum",
+                                                              fill_value=0))
+
+        expected = pd.DataFrame(
+            {
+                "Customer": ["Alice", "Bob", "Carol", "Dave"],
+                YESTERDAY: [14, 12, 0, 0],
+                TODAY: [14, 0, 12, 0],
+                TOMORROW: [12, 1, 2, 12]
             }
         ).set_index("Customer")
 
