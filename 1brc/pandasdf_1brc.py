@@ -8,12 +8,15 @@ if __name__ == "__main__":
         "D:\\projects\\1brc\\" + "measurements_10.txt",
         sep=";",
         header=None,
-        names=["station", "measure"],
+        names=["station", "temperature"],
         engine='pyarrow'
     )
 
-    df = df.groupby("station").agg(["min", "max", "mean"])
+    load_time = time.time()
 
+    print(f"Loaded: {load_time - start_time:.2f}s")
+
+    df = df.groupby("station").agg(["min", "max", "mean"])
     df.columns = df.columns.droplevel()
 
     df = df.sort_values("station")
