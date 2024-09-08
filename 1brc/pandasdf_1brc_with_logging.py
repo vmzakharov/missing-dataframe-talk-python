@@ -20,17 +20,17 @@ if __name__ == "__main__":
     )
 
     load_time = time.monotonic()
-
     print_time("Loaded", start_time, load_time)
 
     df = df.groupby("Station").agg(["min", "mean", "max"])
 
+    # A (potentially faster) alternative:
+    # df = df.groupby("Station", sort=False).agg(["min", "mean", "max"])
+    # df = df.sort_values("Station")
+
     df.columns = df.columns.droplevel()
 
-    df = df.sort_values("Station")
-
     end_time = time.monotonic()
-
     print_time("Aggregated", load_time, end_time)
 
     for index, row in df.iterrows():
