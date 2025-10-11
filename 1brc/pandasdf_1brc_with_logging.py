@@ -3,6 +3,7 @@ import time
 
 FILE = "measurements_10.txt"
 
+
 def print_time(message, begin_time, end_time):
     delta_ms = int((end_time - begin_time) * 1000)
     print(f"{message}: {delta_ms} ms")

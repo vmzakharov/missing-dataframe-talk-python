@@ -122,8 +122,8 @@ class TestDonutShop(unittest.TestCase):
     def test_donut_count_per_customer_per_day(self):
         deliveries_by_cust_by_date = (self.orders
                                       .groupby(["Customer", "DeliveryDate"])
-                                      .sum() # only care about Quantity
-                                      .reset_index() # flatten all index levels for rows
+                                      .sum()  # only care about Quantity
+                                      .reset_index()  # flatten all index levels for rows
                                       .pivot(index="Customer", columns="DeliveryDate",
                                              values="Quantity")
                                       )
@@ -161,4 +161,3 @@ class TestDonutShop(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
