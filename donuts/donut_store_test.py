@@ -155,7 +155,7 @@ class TestDonutShop(unittest.TestCase):
                 TOMORROW: [12, 1, 2, 12]
             }
         ).set_index("Customer")
-
+        self.assertTrue(False)
         self.assertTrue(expected.equals(deliveries_by_cust_by_date))
 
 
